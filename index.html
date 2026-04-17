@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>薬学系研修会 スケジューリングサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom Styles */
-        body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: #f3f4f6; color: #1f2937; display: flex; flex-direction: column; min-height: 100vh; }
+        body { font-family: 'Noto Sans JP', 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: #f3f4f6; color: #1f2937; display: flex; flex-direction: column; min-height: 100vh; }
         .page { display: none; }
         .page.active { display: block; }
         .footer { margin-top: auto; }
@@ -41,6 +44,7 @@
                 </div>
                 <div class="flex items-center space-x-2 hidden md:flex ml-4">
                     <button onclick="navigate('home')" class="hover:bg-orange-600 px-3 py-2 rounded">ホーム</button>
+                    <button onclick="navigate('how-to-use')" class="hover:bg-orange-600 px-3 py-2 rounded">YAKUKENの使い方</button>
                     <button onclick="navigate('calendar')" class="hover:bg-orange-600 px-3 py-2 rounded">カレンダー</button>
                     <button onclick="navigate('column')" class="hover:bg-orange-600 px-3 py-2 rounded">お役立ちコラム</button>
                 </div>
@@ -57,6 +61,7 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-orange-600 pb-3 px-2">
             <button onclick="navigate('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">ホーム</button>
+            <button onclick="navigate('how-to-use'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">YAKUKENの使い方</button>
             <button onclick="navigate('calendar'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">カレンダー</button>
             <button onclick="navigate('column'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">お役立ちコラム</button>
         </div>
@@ -172,53 +177,7 @@
 
         <!-- Column List Page -->
         <div id="page-column" class="page">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
-                <h2 class="text-2xl font-bold text-gray-800">お役立ちコラム</h2>
-                <button onclick="document.getElementById('post-column-form').classList.toggle('hidden')" class="w-full sm:w-auto bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2.5 px-4 rounded text-sm transition-colors border border-orange-200">
-                    ＋ 新規コラムを投稿
-                </button>
-            </div>
-
-            <!-- Post Form (Hidden by default) -->
-            <div id="post-column-form" class="bg-white p-4 sm:p-6 rounded shadow-md max-w-2xl mx-auto hidden border-t-4 border-orange-500 mb-8">
-                <div class="flex justify-between items-start mb-4 border-b pb-2 gap-2">
-                    <h3 class="text-base sm:text-lg font-bold text-gray-800 leading-snug">新規コラムの投稿<br class="sm:hidden"><span class="text-sm font-normal text-gray-600 sm:ml-2">（運営確認後に掲載）</span></h3>
-                    <button onclick="document.getElementById('post-column-form').classList.add('hidden')" class="text-gray-500 hover:text-gray-800 text-2xl leading-none px-2">&times;</button>
-                </div>
-                <form onsubmit="submitColumn(event)">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">タイトル</label>
-                        <input type="text" id="column-title-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">カテゴリー</label>
-                        <select id="column-category-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 bg-white">
-                            <option value="">選択してください</option>
-                            <option value="業務効率化">業務効率化</option>
-                            <option value="ツール活用">ツール活用</option>
-                            <option value="スケジュール管理">スケジュール管理のノウハウ</option>
-                            <option value="その他">その他</option>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-gray-700 font-bold mb-2">投稿者名</label>
-                            <input type="text" id="column-author-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-bold mb-2">メールアドレス</label>
-                            <input type="email" id="column-email-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-bold mb-2">本文</label>
-                        <textarea id="column-content-input" rows="6" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition-colors shadow-sm">
-                        投稿する
-                    </button>
-                </form>
-            </div>
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">お役立ちコラム</h2>
             
             <div id="columns-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Columns populated by JS -->
@@ -240,6 +199,27 @@
                 
                 <h3 class="text-xl font-bold mt-4 mb-2">4. 著作権について</h3>
                 <p class="mb-4">当サイトで掲載している文章や画像などにつきましては、無断転載することを禁止します。</p>
+            </div>
+        </div>
+
+        <!-- How To Use Page -->
+        <div id="page-how-to-use" class="page">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">YAKUKENの使い方</h2>
+            <div class="bg-white p-6 md:p-8 rounded shadow max-w-4xl mx-auto space-y-8">
+                <div>
+                    <h3 class="text-xl font-bold text-orange-600 mb-3 border-b-2 border-orange-200 pb-2">1. 研修会をさがす</h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">ホーム画面では、最新の研修会情報が一覧で表示されます。さらに上部の「カテゴリー」や「開催地」フィルターを使うことで、ご自身の専門領域や受講しやすいエリアに絞って簡単に探すことができます。<br>また、「カレンダー」タブからは月ごとのスケジュールを一覧や曜日の感覚で直感的に確認することが可能です。</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-orange-600 mb-3 border-b-2 border-orange-200 pb-2">2. Googleカレンダーに予定を追加する</h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">気になる研修会が見つかったら、一覧の「詳細を表示 ▼」をクリックしてください。出てきた詳細情報の右下にある<span class="font-bold text-orange-500">「Googleカレンダーに追加」</span>ボタンを押すことで、ワンクリックでご自身のスマートフォンやPCのGoogleカレンダーに日時と場所、URLが登録されます。<br>手動で転記する手間がなくなり、予定のバッティングや見落としを防ぐことができます。</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-orange-600 mb-3 border-b-2 border-orange-200 pb-2">3. お役立ちコラムを活用する</h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">「お役立ちコラム」タブでは、医療現場のスケジュール管理術や、最新の日程調整ツールの活用法など、業務効率化に役立つ記事を配信しています。日々の業務のスキマ時間にぜひご活用ください。</p>
+                </div>
             </div>
         </div>
 
@@ -281,7 +261,8 @@
             </div>
             <div class="flex space-x-4 text-sm items-center">
                 <a href="#" onclick="navigate('privacy')" class="hover:text-orange-300">プライバシーポリシー</a>
-                <a href="https://sunnyside-d.com/#/#home" target="_blank" rel="noopener noreferrer" class="hover:text-orange-300 text-orange-400 font-semibold">
+                <a href="mailto:katoken.d@outlook.jp?subject=YAKUKENに関するお問い合わせ" class="hover:text-orange-300">お問い合わせ</a>
+                <a href="https://sunnyside-d.com/#/#home" target="_blank" rel="noopener noreferrer" class="hover:text-orange-300 text-orange-400 font-semibold ml-2">
                     supported by SunnySideDesign
                 </a>
             </div>
@@ -2108,28 +2089,27 @@
     "credits": "3"
   }
 ];
-
-        // Columns Data Storage Initialization (Must happen before init())
-        const STORAGE_KEY = 'yakuken_columns_data';
         let columnsData = [];
-        
         try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                // Clear out existing data during this update to remove dummy articles as requested
-                // Note: since no users have real data yet, clearing it universally for this session resets everything to empty.
-                const parsed = JSON.parse(stored);
-                // We're forcing it empty this time per instructions "とりあえず投稿されている３つの記事は削除してください"
-                columnsData = [];
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
-            } else {
-                // Initialize empty if no saved data
-                columnsData = [];
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
-            }
-        } catch (e) {
-            console.error('Failed to load columns from storage', e);
-            columnsData = [];
+            columnsData = JSON.parse(`[
+  {
+    "title": "yakuken開発の裏側：なぜこのツールを作ろうと思ったのか",
+    "category": "その他",
+    "author": "katoken",
+    "date": "2026/04/17",
+    "content": "こんにちは、SUNNY SIDE DESIGNのkatokenです。\\n今回は、医薬品の勉強会・説明会に特化したスケジュール管理ツール「yakuken」を、なぜ開発しようと思ったのか、その裏側にあるストーリーと想いをお話しします。\\n\\n医療現場のスケジュール管理、まだ「紙」ですか？\\nあらゆる業界でデジタル化が進む昨今ですが、医療機関や薬局の現場では、まだまだ「アナログな情報管理」が根強く残っているケースをよく目にします。\\n\\nその代表例が、医薬品の勉強会や説明会のスケジュール管理です。\\n新しい薬の知識をアップデートするための重要な機会であるにもかかわらず、その日程調整や参加者の共有は、壁に貼られたカレンダーへの手書き、FAX、あるいは個人のチャットツールなど、バラバラな方法で行われていることが少なくありません。\\n\\nアナログ管理が引き起こす「見えない非効率」\\n紙やホワイトボード、チャットベースでの管理には、いくつかの明確なデメリットがあります。\\n\\n情報の属人化と見落とし： 「ホワイトボードを見に行かないと予定がわからない」「チャットのタイムラインに情報が流れてしまい、開催日時を見失う」\\n\\nダブルブッキングのリスク： 複数人でスケジュールを書き込むため、予定の重複が発生しやすい。\\n\\n共有の手間： 担当者が変わるたびに、スケジュールの引き継ぎや共有方法のレクチャーが必要になる。\\n\\nこうした「本来の業務ではない部分」でのストレスや非効率を解消できないか。そう考えたのが「yakuken」開発の原点です。\\n\\n「yakuken」に込めたシンプルな解決策\\n課題を解決するために目指したのは、誰もが迷わず使える「シンプルで共有しやすいプラットフォーム」でした。\\n\\n多機能すぎるシステムは、逆に現場の混乱を招きます。yakukenは「医薬品の勉強会スケジュールを管理・共有する」という一点に集中し、以下の特徴を持たせました。\\n\\nブラウザベースで即座にアクセス： 専用アプリのインストールは不要。スマホやパソコンのブラウザから、いつでもどこでも最新のスケジュールを確認できます。\\n\\n直感的な操作性： ITツールに不慣れな方でも、パッと見て予定がわかるUI（ユーザーインターフェース）を採用しています。\\n\\nリンク一つで簡単共有： 参加予定者への情報共有も、サイトのURLや特定のスケジュールリンクを共有するだけで完結します。\\n\\n医療現場に「心地よいデザイン」と「効率」を\\n私は普段、SUNNY SIDE DESIGNとして、デザインやAIを活用した業務効率化のサポートを行っています。その中で常に意識しているのは「使う人の心理的ハードルを下げること」です。\\n\\nyakukenのデザインや操作画面にも、その理念を反映させています。毎日開きたくなるような、スッキリとしていて迷いのない導線設計にこだわりました。単なる予定表ではなく、医療従事者の皆様が「本来の業務（患者さんと向き合う時間や、知識の習得）」に集中するための、心地よい土台でありたいと考えています。\\n\\nおわりに\\nyakukenは、まだまだ成長中のツールです。実際に使っていただく中でのフィードバックを反映しながら、より便利で、より「現場のかゆいところに手が届く」サービスへとアップデートを続けていきます。\\n\\n「紙でのスケジュール管理に限界を感じている」「もっとスムーズに勉強会の予定を共有したい」と感じている方は、ぜひ一度yakukenを試してみてください。"
+  },
+  {
+    "title": "スケジュール調整・管理を効率化する3つのステップ",
+    "category": "AI・生産性・ライフハック",
+    "author": "katoken",
+    "date": "2026/04/17",
+    "content": "YAKUKENをご覧の皆様、こんにちは。katokenです。\\n\\n「来月の打ち合わせ、いつにしますか？」\\n「次回の研修会、どうやってスケジュールに組み込もう？」\\n\\n日々の業務に加えて、自己研鑽のための勉強会、さらにプライベートや子育てなど、複数の予定が重なると、カレンダーの管理だけでも一苦労ですよね。私自身も、薬剤師としてのバックグラウンドを持ちつつ、現在はデザインやデジタルの支援事業を行いながら小さな子どもたちの育児に追われているため、「いかに調整の時間を減らすか」は常に大きなテーマです。\\n\\n今回は、面倒な日程調整やスケジュール管理を効率化する3つの方法をご紹介します。\\n\\n1. 日程の候補出しをツールに任せる\\n手作業でカレンダーを見ながら候補日をリストアップするのはやめましょう。\\nTimeRex や Spir といったツールを使えば、自分のカレンダーの空き状況を自動で抽出し、予約ページとして共有できます。相手にURLを送るだけで、お互いの予定が確定し、カレンダーにも自動登録されます。\\n\\n2. YAKUKENの「Googleカレンダー連携」を使い倒す\\n日々アップデートされる薬学系の研修会情報。せっかく興味のある内容を見つけても、いちいち手作業で自分のカレンダーに日時やURLを転記するのは手間がかかります。\\n\\nまさに今皆さんがご覧になっているこの 「YAKUKEN」 の最大の強みが、研修会の日程をワンクリックでGoogleカレンダーに登録できる連携機能です。\\nこの機能を使うメリットは、転記の手間と入力ミスをゼロにできること。必要な情報がそのままカレンダーに反映されるため、情報収集からスケジュール管理までの導線が非常にスムーズになります。\\n\\n3. 日程調整の「自分ルール」を決めておく\\n意外と重要なのが、運用上のルールを決めておくことです。\\n\\n複数人の調整には一覧性の高いツールを使う： 大人数の場合は「トントン」など、直感的なデザインで全員の空きがパッと見てわかるツールを使います。\\n\\n打ち合わせは「45分」をデフォルトにする： 60分ではなく45分で設定し、次の予定までの準備時間や頭の切り替えのための「余白」を作ります。\\n\\n期限を設ける： 「〇日までに回答がなければ再調整します」とあらかじめ伝え、予定が保留になるストレスを減らします。\\n\\n結び\\nスケジュール調整や転記作業そのものは、直接的な価値を生む時間ではありません。\\n便利なツールやカレンダー連携機能をうまく使いこなすことで、本当に時間を割きたい「クリエイティブな活動」や「家族との時間」を増やしていきましょう。"
+  }
+]
+`);
+        } catch(e) {
+            console.error('Failed to parse columns data', e);
         }
 
         // State
@@ -2177,18 +2157,65 @@
                     detailPage.classList.remove('hidden');
                     detailPage.classList.add('active');
                     
+                    // Advanced simple markdown-like formatting for plain text to look highly professional
+                    const formatContent = (text) => {
+                        const lines = text.split('\n');
+                        let html = '';
+                        let currentParagraph = [];
+
+                        const flushParagraph = () => {
+                            if (currentParagraph.length > 0) {
+                                html += `<p class="text-gray-800 mb-8 text-base md:text-lg tracking-wide" style="line-height: 2.0; letter-spacing: 0.03em;">${currentParagraph.join('<br>')}</p>`;
+                                currentParagraph = [];
+                            }
+                        };
+
+                        lines.forEach(line => {
+                            const trimmed = line.trim();
+                            if (!trimmed) {
+                                flushParagraph();
+                                return;
+                            }
+                            
+                            // Treat as heading if:
+                            // 1. It is the start of a new paragraph (or right after a blank line)
+                            // 2. It is relatively short (< 40 chars)
+                            // 3. It doesn't end with '。' or '、'
+                            if (currentParagraph.length === 0 && trimmed.length < 40 && !trimmed.endsWith('。') && !trimmed.endsWith('、')) {
+                                html += `<h2 class="text-xl md:text-2xl font-bold text-gray-900 mt-14 mb-6 pl-4 py-1.5 border-l-4 border-orange-500 bg-gray-50 leading-snug">${trimmed}</h2>`;
+                            } else {
+                                currentParagraph.push(trimmed);
+                            }
+                        });
+                        flushParagraph(); // Flush any remaining text
+                        return html;
+                    };
+                    
                     // Populate content
                     document.getElementById('column-detail-container').innerHTML = `
-                        <div class="mb-4 text-center sm:text-left">
-                            <span class="inline-block bg-orange-100 text-orange-800 text-sm font-semibold px-3 py-1 rounded-full border mb-4">${col.category}</span>
-                            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 leading-relaxed">${col.title}</h1>
-                            <div class="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500 gap-2 sm:gap-6 justify-center sm:justify-start">
-                                <span>投稿日: ${col.date}</span>
-                                <span>投稿者: ${col.author}</span>
+                        <div class="max-w-3xl mx-auto px-2 md:px-0 mt-4 md:mt-8 mb-16">
+                            <div class="mb-8 text-center sm:text-left">
+                                <span class="inline-block bg-orange-100 text-orange-800 text-xs md:text-sm font-semibold px-3 py-1 rounded-full border border-orange-200 mb-5">${col.category}</span>
+                                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-relaxed" style="letter-spacing: 0.02em;">${col.title}</h1>
+                                <div class="flex flex-col sm:flex-row sm:items-center text-sm md:text-base text-gray-500 gap-2 sm:gap-6 justify-center sm:justify-start py-4 border-y border-gray-100 mt-4">
+                                    <span class="flex items-center justify-center sm:justify-start">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        ${col.date}
+                                    </span>
+                                    <span class="flex items-center justify-center sm:justify-start">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                        ${col.author}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="column-body">
+                                ${formatContent(col.content)}
+                            </div>
+                            
+                            <div class="mt-16 pt-8 border-t border-gray-200 text-center">
+                                <a href="/?tab=column&${Date.now()}" class="inline-block px-6 py-3 bg-white border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors font-medium">← コラム一覧へ戻る</a>
                             </div>
                         </div>
-                        <hr class="my-6 border-gray-200">
-                        <div class="prose max-w-none text-gray-700 leading-loose whitespace-pre-wrap text-base md:text-lg">${col.content}</div>
                     `;
                 } else {
                     document.body.innerHTML = '<div class="text-center mt-20"><h2 class="text-2xl font-bold text-gray-800">コラムが見つかりませんでした。</h2><p class="mt-4"><a href="/?' + Date.now() + '" class="text-orange-500 hover:underline">一覧に戻る</a></p></div>';
@@ -2571,54 +2598,6 @@
             }
         }
 
-        function submitColumn(e) {
-            e.preventDefault();
-            
-            const title = document.getElementById('column-title-input').value;
-            const category = document.getElementById('column-category-input').value;
-            const author = document.getElementById('column-author-input').value;
-            const email = document.getElementById('column-email-input').value;
-            const content = document.getElementById('column-content-input').value;
-            const today = new Date().toLocaleDateString('ja-JP');
-            
-            // Build email subject and body
-            const subject = encodeURIComponent("【新規コラム投稿申請】" + title);
-            const body = encodeURIComponent(
-                "運営者様\n\n以下のコラム投稿申請がありました。内容を確認の上、サイトへの掲載（承認）をお願いいたします。\n\n" +
-                "【タイトル】\n" + title + "\n\n" +
-                "【カテゴリー】\n" + category + "\n\n" +
-                "【投稿者名】\n" + author + "\n\n" +
-                "【メールアドレス】\n" + email + "\n\n" +
-                "【本文】\n" + content + "\n"
-            );
-
-            // Open email client
-            window.location.href = "mailto:katoken.d@outlook.jp?subject=" + subject + "&body=" + body;
-            
-            // Generate a locally styled card for the newly submitted column as a preview
-            const newColumn = {
-                title: title,
-                category: category,
-                author: author,
-                date: today,
-                content: content
-            };
-            
-            columnsData.unshift(newColumn);
-            
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
-            } catch (e) {
-                console.error('Failed to save column to storage', e);
-            }
-            
-            renderColumns();
-            
-            alert('メールソフトを起動します。内容を送信して申請を完了してください。\n（この端末上ではすぐにプレビュー表示されます）');
-            e.target.reset();
-            document.getElementById('post-column-form').classList.add('hidden');
-        }
-
         function renderColumns() {
             const container = document.getElementById('columns-container');
             container.innerHTML = '';
@@ -2637,25 +2616,26 @@
                 if (col.category === '業務効率化') badgeColor = "bg-blue-100 text-blue-800";
                 if (col.category === 'ツール活用') badgeColor = "bg-green-100 text-green-800";
                 if (col.category === 'スケジュール管理') badgeColor = "bg-purple-100 text-purple-800";
+                if (col.category.includes('AI') || col.category.includes('生産性')) badgeColor = "bg-indigo-100 text-indigo-800";
 
                 card.innerHTML = `
                     <div class="p-5 flex-grow">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="inline-block ${badgeColor} text-xs font-semibold px-2.5 py-1 rounded-full border">
+                            <span class="inline-block ${badgeColor} text-xs md:text-sm font-semibold px-3 py-1 rounded-full border">
                                 ${col.category}
                             </span>
-                            <span class="text-xs text-gray-500 font-medium">${col.date}</span>
+                            <span class="text-xs md:text-sm text-gray-500 font-medium">${col.date}</span>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug">${col.title}</h3>
-                        <p class="column-text text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">${col.content}</p>
+                        <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3 leading-snug" style="letter-spacing: 0.02em;">${col.title}</h3>
+                        <p class="column-text text-gray-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">${col.content}</p>
                     </div>
-                    <div class="bg-gray-50 p-3 border-t border-gray-100 flex items-center justify-between mt-auto">
-                        <div class="text-xs text-gray-600 font-medium flex items-center">
+                    <div class="bg-gray-50 p-4 border-t border-gray-100 flex items-center justify-between mt-auto">
+                        <div class="text-xs md:text-sm text-gray-600 font-medium flex items-center">
                             <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             ${col.author}
                         </div>
-                        <a href="${window.location.pathname}?column=${index}" target="_blank" class="text-orange-500 hover:text-orange-700 text-sm font-semibold focus:outline-none hover:underline whitespace-nowrap">
-                            続きを読む ▶
+                        <a href="${window.location.pathname}?column=${index}" target="_blank" class="text-orange-500 hover:text-orange-700 text-sm md:text-base font-semibold focus:outline-none flex items-center group">
+                            続きを読む <span class="group-hover:translate-x-1 transition-transform inline-block ml-1">→</span>
                         </a>
                     </div>
                 `;
