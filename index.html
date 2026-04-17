@@ -2130,7 +2130,18 @@
             "静": "静岡県", "愛": "愛知県", "三": "三重県", "滋": "滋賀県", "都": "京都府", "阪": "大阪府", "庫": "兵庫県",
             "奈": "奈良県", "和": "和歌山県", "鳥": "鳥取県", "根": "島根県", "岡": "岡山県", "広": "広島県", "口": "山口県",
             "徳": "徳島県", "香": "香川県", "媛": "愛媛県", "高": "高知県", "賀": "佐賀県", "崎": "長崎県",
-            "熊": "熊本県", "大": "大分県", "鹿": "鹿児島県", "沖": "沖縄県"
+            "熊": "熊本県", "大": "大分県", "鹿": "鹿児島県", "宮": "宮崎県", "沖": "沖縄県"
+        };
+
+        const regionMap = {
+            "北海道": "北海道",
+            "青森県": "東北", "岩手県": "東北", "宮城県": "東北", "秋田県": "東北", "山形県": "東北", "福島県": "東北",
+            "茨城県": "関東", "栃木県": "関東", "群馬県": "関東", "埼玉県": "関東", "千葉県": "関東", "東京都": "関東", "神奈川県": "関東",
+            "新潟県": "信越", "富山県": "信越", "石川県": "信越", "福井県": "信越", "山梨県": "信越", "長野県": "信越", "岐阜県": "信越", "静岡県": "信越", "愛知県": "信越",
+            "三重県": "関西", "滋賀県": "関西", "京都府": "関西", "大阪府": "関西", "兵庫県": "関西", "奈良県": "関西", "和歌山県": "関西",
+            "鳥取県": "中国四国", "島根県": "中国四国", "岡山県": "中国四国", "広島県": "中国四国", "山口県": "中国四国", "徳島県": "中国四国", "香川県": "中国四国", "愛媛県": "中国四国", "高知県": "中国四国",
+            "福岡県": "九州", "佐賀県": "九州", "長崎県": "九州", "熊本県": "九州", "大分県": "九州", "宮崎県": "九州", "鹿児島県": "九州",
+            "沖縄県": "沖縄"
         };
 
         // Initialization
@@ -2234,25 +2245,29 @@
             events = rawEvents.map(ev => {
                 let cleaned = { ...ev };
                 
-                // 1. Clean Location & Extract Prefecture
+                // 1. Clean Location & Extract Prefecture and Region
                 let loc = cleaned.location || "";
                 let area = "その他/オンライン";
                 
-                if (loc.includes("オンライン") || loc.includes("Web")) {
+                if (loc.includes("オンライン") || loc.includes("Web") || loc.includes("WEB") || loc.includes("zoom") || loc.includes("Zoom")) {
                     area = "オンライン";
                 } else {
+                    let prefFound = null;
                     // Check for single character prefecture typos like "道 健吾"
                     const firstChar = loc.charAt(0);
                     if (prefMap[firstChar] && loc.charAt(1) === ' ') {
-                        area = prefMap[firstChar];
+                        prefFound = prefMap[firstChar];
                     } else {
                         // Search for full prefecture names
                         for (const pref of Object.values(prefMap)) {
                             if (loc.includes(pref) || loc.includes(pref.replace(/(都|道|府|県)$/, ''))) {
-                                area = pref;
+                                prefFound = pref;
                                 break;
                             }
                         }
+                    }
+                    if (prefFound) {
+                        area = regionMap[prefFound] || prefFound;
                     }
                 }
                 cleaned.area = area;
@@ -2326,8 +2341,19 @@
 
         function populateAreaFilter() {
             const select = document.getElementById('filter-area');
-            const sortedAreas = Array.from(areas).sort();
-            sortedAreas.forEach(area => {
+            const targetAreas = ["北海道", "東北", "関東", "信越", "関西", "中国四国", "九州", "沖縄", "オンライン", "その他/オンライン"];
+            
+            // Only show areas that actually exist in the data and in the requested geographic order
+            const displayAreas = targetAreas.filter(a => areas.has(a));
+            
+            // Append any generic or unknown regions that weren't caught at the end
+            Array.from(areas).forEach(a => {
+                if (!targetAreas.includes(a)) {
+                    displayAreas.push(a);
+                }
+            });
+
+            displayAreas.forEach(area => {
                 const option = document.createElement('option');
                 option.value = area;
                 option.textContent = area;
