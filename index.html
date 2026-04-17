@@ -42,7 +42,7 @@
                 <div class="flex items-center space-x-2 hidden md:flex ml-4">
                     <button onclick="navigate('home')" class="hover:bg-orange-600 px-3 py-2 rounded">ホーム</button>
                     <button onclick="navigate('calendar')" class="hover:bg-orange-600 px-3 py-2 rounded">カレンダー</button>
-                    <button onclick="navigate('column')" class="hover:bg-orange-600 px-3 py-2 rounded">コラム投稿</button>
+                    <button onclick="navigate('column')" class="hover:bg-orange-600 px-3 py-2 rounded">お役立ちコラム</button>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="flex items-center md:hidden">
@@ -58,7 +58,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-orange-600 pb-3 px-2">
             <button onclick="navigate('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">ホーム</button>
             <button onclick="navigate('calendar'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">カレンダー</button>
-            <button onclick="navigate('column'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">コラム投稿</button>
+            <button onclick="navigate('column'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded hover:bg-orange-700">お役立ちコラム</button>
         </div>
     </nav>
 
@@ -170,31 +170,58 @@
             </div>
         </div>
 
-        <!-- Column Post Page -->
+        <!-- Column List Page -->
         <div id="page-column" class="page">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">薬学系コラム投稿</h2>
-            <div class="bg-white p-6 rounded shadow max-w-2xl mx-auto">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-bold text-gray-800">お役立ちコラム</h2>
+                <button onclick="document.getElementById('post-column-form').classList.toggle('hidden')" class="w-full sm:w-auto bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2.5 px-4 rounded text-sm transition-colors border border-orange-200">
+                    ＋ 新規コラムを投稿
+                </button>
+            </div>
+
+            <!-- Post Form (Hidden by default) -->
+            <div id="post-column-form" class="bg-white p-4 sm:p-6 rounded shadow-md max-w-2xl mx-auto hidden border-t-4 border-orange-500 mb-8">
+                <div class="flex justify-between items-start mb-4 border-b pb-2 gap-2">
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 leading-snug">新規コラムの投稿<br class="sm:hidden"><span class="text-sm font-normal text-gray-600 sm:ml-2">（運営確認後に掲載）</span></h3>
+                    <button onclick="document.getElementById('post-column-form').classList.add('hidden')" class="text-gray-500 hover:text-gray-800 text-2xl leading-none px-2">&times;</button>
+                </div>
                 <form onsubmit="submitColumn(event)">
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">タイトル</label>
-                        <input type="text" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
+                        <input type="text" id="column-title-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">投稿者名</label>
-                        <input type="text" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
+                        <label class="block text-gray-700 font-bold mb-2">カテゴリー</label>
+                        <select id="column-category-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 bg-white">
+                            <option value="">選択してください</option>
+                            <option value="業務効率化">業務効率化</option>
+                            <option value="ツール活用">ツール活用</option>
+                            <option value="スケジュール管理">スケジュール管理のノウハウ</option>
+                            <option value="その他">その他</option>
+                        </select>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">メールアドレス</label>
-                        <input type="email" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">投稿者名</label>
+                            <input type="text" id="column-author-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">メールアドレス</label>
+                            <input type="email" id="column-email-input" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
+                        </div>
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-bold mb-2">本文</label>
-                        <textarea rows="8" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"></textarea>
+                        <textarea id="column-content-input" rows="6" required class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded">
+                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition-colors shadow-sm">
                         投稿する
                     </button>
                 </form>
+            </div>
+            
+            <div id="columns-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Columns populated by JS -->
             </div>
         </div>
 
@@ -213,6 +240,19 @@
                 
                 <h3 class="text-xl font-bold mt-4 mb-2">4. 著作権について</h3>
                 <p class="mb-4">当サイトで掲載している文章や画像などにつきましては、無断転載することを禁止します。</p>
+            </div>
+        </div>
+
+        <!-- Column Detail Page -->
+        <div id="page-column-detail" class="page hidden" style="display: none;">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <button onclick="window.close()" class="mb-6 text-orange-500 hover:text-orange-700 font-bold flex items-center bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100 transition-colors">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    閉じる (タブを消す)
+                </button>
+                <div id="column-detail-container" class="bg-white p-6 md:p-10 rounded-lg shadow-md border border-gray-100">
+                    <!-- Column detail populated by JS -->
+                </div>
             </div>
         </div>
 
@@ -2069,6 +2109,29 @@
   }
 ];
 
+        // Columns Data Storage Initialization (Must happen before init())
+        const STORAGE_KEY = 'yakuken_columns_data';
+        let columnsData = [];
+        
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                // Clear out existing data during this update to remove dummy articles as requested
+                // Note: since no users have real data yet, clearing it universally for this session resets everything to empty.
+                const parsed = JSON.parse(stored);
+                // We're forcing it empty this time per instructions "とりあえず投稿されている３つの記事は削除してください"
+                columnsData = [];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
+            } else {
+                // Initialize empty if no saved data
+                columnsData = [];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
+            }
+        } catch (e) {
+            console.error('Failed to load columns from storage', e);
+            columnsData = [];
+        }
+
         // State
         let events = [];
         let areas = new Set();
@@ -2092,6 +2155,47 @@
 
         // Initialization
         function init() {
+            renderColumns();
+
+            // Check for column query param
+            const urlParams = new URLSearchParams(window.location.search);
+            const columnId = urlParams.get('column');
+            if (columnId !== null) {
+                if (columnsData[parseInt(columnId)]) {
+                    const col = columnsData[parseInt(columnId)];
+                    
+                    // Hide navigation and footer
+                    document.querySelector('nav').style.display = 'none';
+                    document.querySelector('footer').style.display = 'none';
+                    
+                    // Hide all other pages
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    
+                    // Show column detail page
+                    const detailPage = document.getElementById('page-column-detail');
+                    detailPage.style.display = 'block';
+                    detailPage.classList.remove('hidden');
+                    detailPage.classList.add('active');
+                    
+                    // Populate content
+                    document.getElementById('column-detail-container').innerHTML = `
+                        <div class="mb-4 text-center sm:text-left">
+                            <span class="inline-block bg-orange-100 text-orange-800 text-sm font-semibold px-3 py-1 rounded-full border mb-4">${col.category}</span>
+                            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 leading-relaxed">${col.title}</h1>
+                            <div class="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500 gap-2 sm:gap-6 justify-center sm:justify-start">
+                                <span>投稿日: ${col.date}</span>
+                                <span>投稿者: ${col.author}</span>
+                            </div>
+                        </div>
+                        <hr class="my-6 border-gray-200">
+                        <div class="prose max-w-none text-gray-700 leading-loose whitespace-pre-wrap text-base md:text-lg">${col.content}</div>
+                    `;
+                } else {
+                    document.body.innerHTML = '<div class="text-center mt-20"><h2 class="text-2xl font-bold text-gray-800">コラムが見つかりませんでした。</h2><p class="mt-4"><a href="/?' + Date.now() + '" class="text-orange-500 hover:underline">一覧に戻る</a></p></div>';
+                }
+                return; // Stop normal init
+            }
+
             cleanData();
             populateAreaFilter();
             renderEvents();
@@ -2469,8 +2573,94 @@
 
         function submitColumn(e) {
             e.preventDefault();
-            alert('コラムが送信されました。確認後、掲載されます。');
+            
+            const title = document.getElementById('column-title-input').value;
+            const category = document.getElementById('column-category-input').value;
+            const author = document.getElementById('column-author-input').value;
+            const email = document.getElementById('column-email-input').value;
+            const content = document.getElementById('column-content-input').value;
+            const today = new Date().toLocaleDateString('ja-JP');
+            
+            // Build email subject and body
+            const subject = encodeURIComponent("【新規コラム投稿申請】" + title);
+            const body = encodeURIComponent(
+                "運営者様\n\n以下のコラム投稿申請がありました。内容を確認の上、サイトへの掲載（承認）をお願いいたします。\n\n" +
+                "【タイトル】\n" + title + "\n\n" +
+                "【カテゴリー】\n" + category + "\n\n" +
+                "【投稿者名】\n" + author + "\n\n" +
+                "【メールアドレス】\n" + email + "\n\n" +
+                "【本文】\n" + content + "\n"
+            );
+
+            // Open email client
+            window.location.href = "mailto:katoken.d@outlook.jp?subject=" + subject + "&body=" + body;
+            
+            // Generate a locally styled card for the newly submitted column as a preview
+            const newColumn = {
+                title: title,
+                category: category,
+                author: author,
+                date: today,
+                content: content
+            };
+            
+            columnsData.unshift(newColumn);
+            
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsData));
+            } catch (e) {
+                console.error('Failed to save column to storage', e);
+            }
+            
+            renderColumns();
+            
+            alert('メールソフトを起動します。内容を送信して申請を完了してください。\n（この端末上ではすぐにプレビュー表示されます）');
             e.target.reset();
+            document.getElementById('post-column-form').classList.add('hidden');
+        }
+
+        function renderColumns() {
+            const container = document.getElementById('columns-container');
+            container.innerHTML = '';
+            
+            if (columnsData.length === 0) {
+                container.innerHTML = '<p class="col-span-full text-center text-gray-500 py-8">現在投稿されているコラムはありません。最初のコラムを投稿してみましょう！</p>';
+                return;
+            }
+
+            columnsData.forEach((col, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200";
+                
+                // Color badging based on category
+                let badgeColor = "bg-orange-100 text-orange-800";
+                if (col.category === '業務効率化') badgeColor = "bg-blue-100 text-blue-800";
+                if (col.category === 'ツール活用') badgeColor = "bg-green-100 text-green-800";
+                if (col.category === 'スケジュール管理') badgeColor = "bg-purple-100 text-purple-800";
+
+                card.innerHTML = `
+                    <div class="p-5 flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="inline-block ${badgeColor} text-xs font-semibold px-2.5 py-1 rounded-full border">
+                                ${col.category}
+                            </span>
+                            <span class="text-xs text-gray-500 font-medium">${col.date}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug">${col.title}</h3>
+                        <p class="column-text text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">${col.content}</p>
+                    </div>
+                    <div class="bg-gray-50 p-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                        <div class="text-xs text-gray-600 font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            ${col.author}
+                        </div>
+                        <a href="${window.location.pathname}?column=${index}" target="_blank" class="text-orange-500 hover:text-orange-700 text-sm font-semibold focus:outline-none hover:underline whitespace-nowrap">
+                            続きを読む ▶
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
         // Run init on load
